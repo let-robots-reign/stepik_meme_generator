@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
+from os import listdir
 
 
 def draw_text(image, type, text):
@@ -16,9 +17,24 @@ def make_meme(image, top_text="", bottom_text=""):
     return image
 
 
+def input_parameters():
+    print("Введите цифру - шаблон для мема")
+    files = listdir("templates")
+    for i in range(len(files)):
+        print(files[i], "-", i + 1)
+    digit = int(input())
+    if digit < 1 or digit - 1 > len(files):
+        print("Вы ввели неверный номер шаблона")
+        quit()
+    top_text = input("Введите текст сверху (Enter, чтобы пропустить): ")
+    bottom_text = input("Введите текст снизу (Enter, чтобы пропустить): ")
+    return files[digit - 1], top_text, bottom_text
+
+
 def main():
-    image = Image.open("templates/boromir.jpg")
-    image = make_meme(image, "Нельзя так просто взять", "и сразу написать идеальное приложение")
+    image_name, top_text, bottom_text = input_parameters()
+    image = Image.open("templates/{}".format(image_name))
+    image = make_meme(image, top_text, bottom_text)
     image.save("meme_result.jpg")
     image.show()
 

@@ -2,13 +2,22 @@ from PIL import Image, ImageDraw, ImageFont
 from os import listdir
 
 
+def draw_outlined_text(draw, pos, text, font):
+    black_color = (0, 0, 0)
+    white_color = (255, 255, 255)
+    draw.text((pos[0] - 3, pos[1] - 3), text, black_color, font)
+    draw.text((pos[0] + 3, pos[1] + 3), text, black_color, font)
+    draw.text((pos[0] + 3, pos[1] - 3), text, black_color, font)
+    draw.text((pos[0] - 3, pos[1] + 3), text, black_color, font)
+    draw.text(pos, text, white_color, font)
+
+
 def draw_text(image, type, text):
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype("impact.ttf", 50)
-    white_color = (255, 255, 255)
     text_width, text_height = draw.textsize(text, font)  # ширина данного текста с данным шрифтом
     y_start = 10 if type == "top" else image.height - text_height - 10  # зависит от расположения
-    draw.text((image.width / 2 - text_width / 2, y_start), text, white_color, font)
+    draw_outlined_text(draw, (image.width / 2 - text_width / 2, y_start), text, font)
 
 
 def make_meme(image, top_text="", bottom_text=""):
